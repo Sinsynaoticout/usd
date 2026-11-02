@@ -3,27 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Synaptic Sovereign Treasury · Terminal de Liquidación USD (T+0)</title>
+  <title>Synaptic Sovereign Treasury · Checkout Corporativo USD (T+0)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-obsidian: #030509;
-      --bg-panel: rgba(11, 15, 25, 0.82);
-      --bg-panel-elevated: rgba(17, 24, 39, 0.78);
-      --bg-input: rgba(6, 9, 16, 0.9);
-      --border-subtle: rgba(255, 255, 255, 0.07);
-      --border-strong: rgba(255, 255, 255, 0.14);
-      --border-gold: rgba(245, 158, 11, 0.38);
-      --border-emerald: rgba(16, 185, 129, 0.38);
+      --bg-panel: rgba(11, 15, 25, 0.86);
+      --bg-input: rgba(6, 9, 16, 0.92);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.15);
       --gold-400: #fbbf24;
       --gold-500: #f59e0b;
       --gold-600: #d97706;
       --emerald-400: #34d399;
       --emerald-500: #10b981;
       --blue-400: #60a5fa;
-      --blue-500: #3b82f6;
       --text-main: #f8fafc;
       --text-secondary: #94a3b8;
       --text-muted: #64748b;
@@ -45,7 +41,6 @@
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      selection-background-color: rgba(245, 158, 11, 0.3);
     }
 
     svg {
@@ -54,13 +49,11 @@
       flex-shrink: 0;
     }
 
-    /* Ambient Luxury Background */
     .ambient-canvas {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      overflow: hidden;
       background:
         radial-gradient(circle at 14% 12%, rgba(245, 158, 11, 0.11) 0%, transparent 42%),
         radial-gradient(circle at 86% 18%, rgba(16, 185, 129, 0.09) 0%, transparent 45%),
@@ -81,14 +74,13 @@
       -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 85%);
     }
 
-    /* Top Command Header */
     .topbar {
       position: sticky;
       top: 0;
       z-index: 40;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      background: rgba(3, 5, 9, 0.82);
+      background: rgba(3, 5, 9, 0.85);
       border-bottom: 1px solid var(--border-subtle);
     }
 
@@ -103,7 +95,7 @@
     }
 
     .topbar-inner {
-      max-width: 1360px;
+      max-width: 1380px;
       margin: 0 auto;
       padding: 14px 28px;
       display: flex;
@@ -248,37 +240,34 @@
     .mode-switch-btn:hover {
       background: rgba(245, 158, 11, 0.22);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.18);
     }
 
-    /* Main Workspace Layout */
     .workspace {
       position: relative;
       z-index: 10;
-      max-width: 1360px;
+      max-width: 1380px;
       margin: 0 auto;
-      padding: 32px 28px 64px;
+      padding: 28px 28px 64px;
     }
 
     .workspace-grid {
       display: grid;
-      grid-template-columns: 460px 1fr;
+      grid-template-columns: 440px 1fr;
       gap: 28px;
       align-items: start;
     }
 
     .workspace-grid.client-only {
-      grid-template-columns: minmax(0, 820px);
+      grid-template-columns: minmax(0, 920px);
       justify-content: center;
     }
 
-    @media (max-width: 1080px) {
+    @media (max-width: 1100px) {
       .workspace-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    /* Glass Panels */
     .luxury-card {
       position: relative;
       background: var(--bg-panel);
@@ -287,7 +276,7 @@
       border: 1px solid var(--border-subtle);
       border-radius: 24px;
       box-shadow:
-        0 24px 60px -15px rgba(0, 0, 0, 0.75),
+        0 24px 60px -15px rgba(0, 0, 0, 0.78),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
       overflow: hidden;
     }
@@ -307,14 +296,14 @@
     }
 
     .card-pad {
-      padding: 28px;
+      padding: 26px;
     }
 
     .section-eyebrow {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .eyebrow-title {
@@ -328,19 +317,12 @@
       color: var(--gold-400);
     }
 
-    /* Issuer Amount Sculptor */
     .amount-box {
       background: linear-gradient(180deg, rgba(6, 9, 16, 0.95) 0%, rgba(12, 18, 30, 0.9) 100%);
       border: 1px solid rgba(245, 158, 11, 0.35);
       border-radius: 18px;
-      padding: 18px 20px;
-      box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.6), 0 0 25px rgba(245, 158, 11, 0.06);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .amount-box:focus-within {
-      border-color: var(--gold-400);
-      box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.6), 0 0 0 3px rgba(245, 158, 11, 0.16);
+      padding: 16px 20px;
+      box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.6);
     }
 
     .amount-box-header {
@@ -352,7 +334,7 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-secondary);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .amount-input-row {
@@ -363,7 +345,7 @@
 
     .currency-symbol {
       font-family: var(--font-display);
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 800;
       color: var(--gold-400);
     }
@@ -374,10 +356,9 @@
       border: none;
       outline: none;
       font-family: var(--font-mono);
-      font-size: 40px;
+      font-size: 38px;
       font-weight: 800;
       color: #ffffff;
-      letter-spacing: -0.03em;
     }
 
     .amount-input::-webkit-outer-spin-button,
@@ -391,20 +372,18 @@
       font-size: 14px;
       font-weight: 800;
       color: var(--text-muted);
-      letter-spacing: 0.08em;
     }
 
-    /* Preset Grid */
     .preset-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
     .preset-chip {
-      padding: 10px 8px;
-      border-radius: 11px;
+      padding: 9px 8px;
+      border-radius: 10px;
       font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 700;
@@ -413,20 +392,17 @@
       color: var(--text-secondary);
       cursor: pointer;
       transition: all 0.16s ease;
-      text-align: center;
     }
 
     .preset-chip:hover {
       border-color: rgba(245, 158, 11, 0.4);
       color: #ffffff;
-      background: rgba(245, 158, 11, 0.1);
     }
 
     .preset-chip.active {
       background: linear-gradient(135deg, rgba(245, 158, 11, 0.24) 0%, rgba(217, 119, 6, 0.12) 100%);
       border-color: var(--gold-400);
       color: var(--gold-400);
-      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.18);
     }
 
     .step-adjust-row {
@@ -446,7 +422,6 @@
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
 
     .step-btn:hover {
@@ -454,9 +429,42 @@
       color: #ffffff;
     }
 
-    /* Form Fields */
+    /* Fee Pass-Through Switch */
+    .fee-mode-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .fee-toggle-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .fee-btn {
+      padding: 8px 10px;
+      border-radius: 9px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(3, 5, 9, 0.7);
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .fee-btn.active {
+      background: rgba(16, 185, 129, 0.16);
+      border-color: var(--emerald-400);
+      color: var(--emerald-400);
+    }
+
     .field-group {
-      margin-top: 16px;
+      margin-top: 14px;
     }
 
     .field-label {
@@ -466,12 +474,12 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-secondary);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
-    .luxury-input {
+    .luxury-input, .luxury-select {
       width: 100%;
-      padding: 12px 14px;
+      padding: 11px 14px;
       border-radius: 12px;
       background: var(--bg-input);
       border: 1px solid var(--border-subtle);
@@ -480,12 +488,11 @@
       font-size: 13px;
       font-weight: 500;
       outline: none;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      transition: border-color 0.18s ease;
     }
 
-    .luxury-input:focus {
+    .luxury-input:focus, .luxury-select:focus {
       border-color: var(--gold-400);
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.14);
     }
 
     .luxury-input.mono {
@@ -494,10 +501,9 @@
       color: var(--gold-400);
     }
 
-    /* Live Settlement Summary Box */
     .settlement-preview {
-      margin-top: 18px;
-      padding: 16px;
+      margin-top: 16px;
+      padding: 14px 16px;
       border-radius: 16px;
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.6) 100%);
       border: 1px solid rgba(16, 185, 129, 0.25);
@@ -529,11 +535,10 @@
       color: var(--emerald-400);
     }
 
-    /* Primary Luxury Buttons */
     .btn-gold-primary {
       width: 100%;
-      margin-top: 18px;
-      padding: 15px 20px;
+      margin-top: 16px;
+      padding: 14px 18px;
       border-radius: 14px;
       border: 1px solid rgba(251, 191, 36, 0.5);
       background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
@@ -541,30 +546,24 @@
       font-family: var(--font-sans);
       font-size: 13px;
       font-weight: 800;
-      letter-spacing: 0.03em;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
       cursor: pointer;
-      box-shadow: 0 10px 28px -6px rgba(245, 158, 11, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      box-shadow: 0 10px 28px -6px rgba(245, 158, 11, 0.45);
       transition: all 0.2s ease;
     }
 
     .btn-gold-primary:hover {
-      transform: translateY(-1px);
       filter: brightness(1.07);
-      box-shadow: 0 14px 34px -6px rgba(245, 158, 11, 0.6);
-    }
-
-    .btn-gold-primary:active {
-      transform: translateY(0);
+      transform: translateY(-1px);
     }
 
     .btn-whatsapp {
       width: 100%;
       margin-top: 10px;
-      padding: 13px 18px;
+      padding: 12px 18px;
       border-radius: 14px;
       border: 1px solid rgba(16, 185, 129, 0.38);
       background: rgba(16, 185, 129, 0.11);
@@ -577,18 +576,11 @@
       justify-content: center;
       gap: 9px;
       cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-whatsapp:hover {
-      background: rgba(16, 185, 129, 0.2);
-      border-color: var(--emerald-400);
-      color: #ffffff;
     }
 
     /* RIGHT COLUMN: CLIENT CHECKOUT PORTAL */
     .invoice-hero {
-      padding: 32px 32px 26px;
+      padding: 28px 30px 24px;
       background:
         radial-gradient(circle at 90% 10%, rgba(245, 158, 11, 0.14) 0%, transparent 55%),
         radial-gradient(circle at 10% 90%, rgba(16, 185, 129, 0.1) 0%, transparent 55%),
@@ -602,13 +594,13 @@
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
 
     .invoice-main-grid {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
-      gap: 24px;
+      gap: 22px;
       align-items: center;
     }
 
@@ -628,28 +620,26 @@
 
     .client-name-display {
       font-family: var(--font-display);
-      font-size: 26px;
+      font-size: 25px;
       font-weight: 800;
       color: #ffffff;
-      margin-top: 4px;
-      letter-spacing: -0.02em;
+      margin-top: 3px;
     }
 
     .concept-display {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-secondary);
-      margin-top: 6px;
-      line-height: 1.45;
+      margin-top: 4px;
     }
 
     .price-monolith {
-      margin-top: 20px;
-      padding: 18px 22px;
-      border-radius: 18px;
+      margin-top: 16px;
+      padding: 15px 20px;
+      border-radius: 16px;
       background: rgba(3, 5, 9, 0.72);
       border: 1px solid rgba(255, 255, 255, 0.08);
       display: inline-block;
-      min-width: 290px;
+      min-width: 280px;
     }
 
     .price-label-sm {
@@ -662,16 +652,15 @@
 
     .price-usd-giant {
       font-family: var(--font-mono);
-      font-size: 42px;
+      font-size: 38px;
       font-weight: 800;
       color: #ffffff;
-      letter-spacing: -0.03em;
       line-height: 1.1;
       margin-top: 4px;
     }
 
     .price-usd-giant span {
-      font-size: 16px;
+      font-size: 15px;
       color: var(--gold-400);
       font-weight: 700;
       margin-left: 4px;
@@ -681,46 +670,25 @@
       font-family: var(--font-mono);
       font-size: 12px;
       color: var(--emerald-400);
-      margin-top: 6px;
+      margin-top: 5px;
       font-weight: 600;
     }
 
-    /* Realistic 3D Black Titanium Credit Card Visual */
+    /* Titanium Card */
     .titanium-card {
       position: relative;
       width: 100%;
-      min-height: 196px;
+      min-height: 184px;
       border-radius: 20px;
-      padding: 22px;
+      padding: 20px;
       background:
         radial-gradient(circle at 85% 18%, rgba(245, 158, 11, 0.25) 0%, transparent 48%),
         linear-gradient(135deg, #1e293b 0%, #0f172a 45%, #050811 100%);
       border: 1px solid rgba(255, 255, 255, 0.16);
-      box-shadow:
-        0 20px 45px -12px rgba(0, 0, 0, 0.85),
-        inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.25);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      overflow: hidden;
-    }
-
-    .titanium-card::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        45deg,
-        transparent 40%,
-        rgba(255, 255, 255, 0.04) 48%,
-        rgba(245, 158, 11, 0.08) 50%,
-        rgba(255, 255, 255, 0.04) 52%,
-        transparent 60%
-      );
-      pointer-events: none;
     }
 
     .card-top-row {
@@ -730,21 +698,11 @@
     }
 
     .emv-chip {
-      width: 42px;
-      height: 31px;
-      border-radius: 7px;
+      width: 40px;
+      height: 29px;
+      border-radius: 6px;
       background: linear-gradient(135deg, #fcd34d 0%, #d97706 100%);
       border: 1px solid rgba(255, 255, 255, 0.35);
-      position: relative;
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
-    }
-
-    .emv-chip::before {
-      content: '';
-      position: absolute;
-      inset: 6px;
-      border: 1px solid rgba(0, 0, 0, 0.28);
-      border-radius: 3px;
     }
 
     .card-type-pill {
@@ -753,15 +711,11 @@
       font-weight: 800;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      padding: 4px 9px;
+      padding: 4px 8px;
       border-radius: 6px;
       background: rgba(245, 158, 11, 0.15);
       color: var(--gold-400);
       border: 1px solid rgba(245, 158, 11, 0.35);
-    }
-
-    .card-mid-row {
-      margin: 18px 0 14px;
     }
 
     .card-charge-caption {
@@ -773,7 +727,7 @@
 
     .card-charge-val {
       font-family: var(--font-mono);
-      font-size: 23px;
+      font-size: 22px;
       font-weight: 800;
       color: #ffffff;
       margin-top: 2px;
@@ -792,10 +746,6 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: #e2e8f0;
-      max-width: 190px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .card-circles {
@@ -804,23 +754,16 @@
     }
 
     .mc-circle-1, .mc-circle-2 {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
     }
 
-    .mc-circle-1 {
-      background: rgba(239, 68, 68, 0.85);
-    }
+    .mc-circle-1 { background: rgba(239, 68, 68, 0.85); }
+    .mc-circle-2 { background: rgba(245, 158, 11, 0.85); margin-left: -8px; }
 
-    .mc-circle-2 {
-      background: rgba(245, 158, 11, 0.85);
-      margin-left: -9px;
-    }
-
-    /* Payment Method Tabs */
     .checkout-body {
-      padding: 28px 32px 32px;
+      padding: 24px 30px 30px;
     }
 
     .method-tabs {
@@ -831,11 +774,11 @@
       border-radius: 16px;
       background: rgba(3, 5, 9, 0.85);
       border: 1px solid var(--border-subtle);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .method-tab {
-      padding: 13px 16px;
+      padding: 12px 16px;
       border-radius: 12px;
       border: 1px solid transparent;
       background: transparent;
@@ -848,60 +791,66 @@
       justify-content: center;
       gap: 9px;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
 
     .method-tab.active-gold {
       background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.08) 100%);
       border-color: rgba(245, 158, 11, 0.45);
       color: var(--gold-400);
-      box-shadow: 0 4px 18px rgba(245, 158, 11, 0.14);
     }
 
     .method-tab.active-emerald {
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.08) 100%);
       border-color: rgba(16, 185, 129, 0.45);
       color: var(--emerald-400);
-      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.14);
     }
 
-    /* Explain Banner + Split Tramo Bar */
-    .split-control-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-      padding: 16px 20px;
-      border-radius: 16px;
-      background: rgba(15, 23, 42, 0.65);
+    /* Native Embedded Card Checkout Layout */
+    .embedded-checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 410px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .embedded-checkout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .native-form-box {
+      padding: 22px;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.6);
       border: 1px solid var(--border-subtle);
-      margin-bottom: 20px;
     }
 
-    .split-info h4 {
-      font-size: 13px;
-      font-weight: 700;
-      color: #ffffff;
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
 
-    .split-info p {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 2px;
+    @media (max-width: 600px) {
+      .form-row-2 {
+        grid-template-columns: 1fr;
+      }
     }
 
     .split-buttons {
       display: flex;
       gap: 8px;
-      background: rgba(3, 5, 9, 0.8);
-      padding: 4px;
-      border-radius: 11px;
+      background: rgba(3, 5, 9, 0.85);
+      padding: 5px;
+      border-radius: 12px;
       border: 1px solid var(--border-subtle);
+      margin-top: 6px;
     }
 
     .split-btn {
-      padding: 8px 13px;
+      flex: 1;
+      padding: 9px 12px;
       border-radius: 8px;
       border: none;
       background: transparent;
@@ -910,7 +859,6 @@
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
 
     .split-btn.active {
@@ -918,165 +866,73 @@
       color: #030509;
     }
 
-    /* Gateway Cards */
-    .gateway-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    /* Embedded Terminal Container (Right side of Checkout) */
+    .iframe-terminal-shell {
+      border-radius: 20px;
+      background: #0b0f19;
+      border: 1px solid rgba(245, 158, 11, 0.38);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
     }
 
-    .gateway-item {
+    .iframe-terminal-header {
+      padding: 12px 16px;
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.16), rgba(16, 185, 129, 0.12));
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-      padding: 20px 22px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, rgba(17, 24, 39, 0.85) 0%, rgba(10, 15, 26, 0.9) 100%);
-      border: 1px solid var(--border-subtle);
-      transition: all 0.2s ease;
-    }
-
-    .gateway-item:hover {
-      border-color: rgba(245, 158, 11, 0.45);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.7);
-    }
-
-    .gateway-item.recommended {
-      border-color: rgba(245, 158, 11, 0.38);
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(15, 23, 42, 0.92) 60%);
-    }
-
-    .gateway-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .gateway-rank {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-mono);
-      font-size: 16px;
+      font-size: 11px;
       font-weight: 800;
-      background: rgba(245, 158, 11, 0.16);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--gold-400);
-      border: 1px solid rgba(245, 158, 11, 0.35);
     }
 
-    .gateway-rank.emerald {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--emerald-400);
-      border-color: rgba(16, 185, 129, 0.35);
+    .embedded-iframe {
+      width: 100%;
+      height: 540px;
+      border: none;
+      display: block;
+      background: #0b0f19;
     }
 
-    .gateway-rank.blue {
-      background: rgba(59, 130, 246, 0.15);
-      color: var(--blue-400);
-      border-color: rgba(59, 130, 246, 0.35);
-    }
-
-    .gateway-title-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .gateway-name {
-      font-size: 15px;
-      font-weight: 800;
-      color: #ffffff;
-    }
-
-    .gateway-desc {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-
-    .btn-pay-rail {
-      padding: 13px 20px;
-      border-radius: 13px;
-      border: 1px solid rgba(251, 191, 36, 0.45);
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      color: #030509;
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      cursor: pointer;
-      transition: all 0.18s ease;
-      white-space: nowrap;
-    }
-
-    .btn-pay-rail:hover {
-      filter: brightness(1.08);
-      transform: scale(1.02);
-    }
-
-    .btn-pay-rail.secondary {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: var(--border-strong);
-      color: #ffffff;
-    }
-
-    .btn-pay-rail.secondary:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: var(--gold-400);
-    }
-
-    /* Destination Lock Bar */
     .vault-bar {
-      margin-top: 22px;
-      padding: 16px 20px;
-      border-radius: 16px;
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: 14px;
       background: rgba(3, 5, 9, 0.9);
       border: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .vault-addr {
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       color: var(--emerald-400);
       word-break: break-all;
       margin-top: 3px;
     }
 
     .btn-copy-sm {
-      padding: 9px 14px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.05);
+      padding: 8px 13px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-strong);
       color: #ffffff;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
 
-    .btn-copy-sm:hover {
-      border-color: var(--gold-400);
-      color: var(--gold-400);
-    }
-
-    /* QR & Direct Crypto View */
+    /* QR View */
     .qr-grid {
       display: grid;
-      grid-template-columns: 240px 1fr;
+      grid-template-columns: 230px 1fr;
       gap: 24px;
       align-items: start;
     }
@@ -1093,12 +949,11 @@
       border-radius: 20px;
       text-align: center;
       color: #0f172a;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
     }
 
     .qr-frame {
-      width: 196px;
-      height: 196px;
+      width: 190px;
+      height: 190px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -1109,18 +964,17 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .net-card {
-      padding: 13px 15px;
+      padding: 12px 14px;
       border-radius: 14px;
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid var(--border-subtle);
       color: var(--text-secondary);
       text-align: left;
       cursor: pointer;
-      transition: all 0.16s ease;
     }
 
     .net-card.active {
@@ -1130,8 +984,8 @@
     }
 
     .verify-box {
-      margin-top: 16px;
-      padding: 18px;
+      margin-top: 14px;
+      padding: 16px;
       border-radius: 16px;
       background: rgba(15, 23, 42, 0.75);
       border: 1px solid var(--border-subtle);
@@ -1152,7 +1006,6 @@
       font-weight: 800;
       font-size: 12px;
       cursor: pointer;
-      white-space: nowrap;
     }
 
     .hidden {
@@ -1161,7 +1014,7 @@
 
     .toast-feedback {
       margin-top: 12px;
-      padding: 12px 14px;
+      padding: 11px 14px;
       border-radius: 12px;
       font-size: 12px;
       font-weight: 600;
@@ -1197,16 +1050,16 @@
         <div>
           <div class="brand-title-row">
             <span class="brand-name">SYNAPTIC SOVEREIGN TREASURY</span>
-            <span class="badge-gold">USD T+0 SETTLEMENT</span>
+            <span class="badge-gold">CHECKOUT EMBEBIDO 3DS</span>
           </div>
-          <p class="brand-sub">Pasarela Corporativa Cupo Internacional en Dólares · Liquidación Directa Binance Spot</p>
+          <p class="brand-sub">Terminal Integrado de Liquidación Internacional USD · Sin Redirecciones Externas</p>
         </div>
       </div>
 
       <div class="topbar-controls">
         <div class="oracle-pill">
           <span class="pulse-dot"></span>
-          <span class="oracle-label">Dólar Observado / Liquidación:</span>
+          <span class="oracle-label">Tasa USD/CLP:</span>
           <span id="liveRateBadge" class="oracle-value">$955.00 CLP</span>
         </div>
 
@@ -1239,10 +1092,9 @@
             <span class="badge-emerald">Editable en Vivo</span>
           </div>
 
-          <!-- Giant USD Sculptor -->
           <div class="amount-box">
             <div class="amount-box-header">
-              <span>Monto Exacto a Cobrar</span>
+              <span>Monto Base aRecibir / Cobrar</span>
               <span style="color: var(--gold-400);">Cupo Internacional USD</span>
             </div>
             <div class="amount-input-row">
@@ -1253,7 +1105,7 @@
                 min="10"
                 max="100000"
                 step="10"
-                value="3000"
+                value="2010"
                 class="amount-input"
                 oninput="syncInvoiceState()"
               />
@@ -1266,9 +1118,9 @@
             <button type="button" class="preset-chip" data-amt="1000" onclick="setQuickAmount(1000)">$1,000 USD</button>
             <button type="button" class="preset-chip" data-amt="1500" onclick="setQuickAmount(1500)">$1,500 USD</button>
             <button type="button" class="preset-chip" data-amt="2000" onclick="setQuickAmount(2000)">$2,000 USD</button>
+            <button type="button" class="preset-chip active" data-amt="2010" onclick="setQuickAmount(2010)">$2,010 USD</button>
             <button type="button" class="preset-chip" data-amt="2300" onclick="setQuickAmount(2300)">$2,300 USD</button>
-            <button type="button" class="preset-chip" data-amt="2500" onclick="setQuickAmount(2500)">$2,500 USD</button>
-            <button type="button" class="preset-chip active" data-amt="3000" onclick="setQuickAmount(3000)">$3,000 USD</button>
+            <button type="button" class="preset-chip" data-amt="3000" onclick="setQuickAmount(3000)">$3,000 USD</button>
           </div>
 
           <!-- Fine Step Adjustments -->
@@ -1279,6 +1131,22 @@
             <button type="button" class="step-btn" onclick="adjustAmount(500)">+ $500</button>
           </div>
 
+          <!-- Fee Pass-Through Mode -->
+          <div class="fee-mode-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; color:var(--text-secondary);">
+              <span>MODO DE COMISIÓN DE PASARELA (~6.8%)</span>
+              <span id="feeBadgeText" style="color:var(--emerald-400); font-family:var(--font-mono);">Cargo Exacto</span>
+            </div>
+            <div class="fee-toggle-btns">
+              <button id="feeBtnExact" type="button" class="fee-btn active" onclick="setFeePassThrough(false)">
+                Cobrar Exacto al Cliente
+              </button>
+              <button id="feeBtnNet" type="button" class="fee-btn" onclick="setFeePassThrough(true)">
+                Recibir 100% Neto (+Fee)
+              </button>
+            </div>
+          </div>
+
           <!-- Client & Concept Fields -->
           <div class="field-group">
             <label class="field-label">Cliente / Razón Social Receptor</label>
@@ -1286,7 +1154,6 @@
               id="inputClientName"
               type="text"
               value="Cliente Corporativo"
-              placeholder="Ej: Inversiones Andes SpA"
               class="luxury-input"
               oninput="syncInvoiceState()"
             />
@@ -1298,14 +1165,13 @@
               id="inputConcept"
               type="text"
               value="Servicios Tecnológicos & Consultoría Synaptic ERP"
-              placeholder="Ej: Hito 1 Licenciamiento Enterprise"
               class="luxury-input"
               oninput="syncInvoiceState()"
             />
           </div>
 
           <div class="field-group">
-            <label class="field-label">Folio Único de Orden (Idempotency Key)</label>
+            <label class="field-label">Folio Único de Orden</label>
             <input
               id="inputInvoiceId"
               type="text"
@@ -1318,16 +1184,16 @@
           <!-- Live Financial Breakdown -->
           <div class="settlement-preview">
             <div class="settlement-row">
-              <span class="settlement-key">Cargo en Tarjeta del Cliente:</span>
-              <span id="summaryUsdCharge" class="settlement-val">$3,000.00 USD</span>
+              <span class="settlement-key">Cargo Total en Tarjeta USD:</span>
+              <span id="summaryUsdCharge" class="settlement-val">$2,010.00 USD</span>
             </div>
             <div class="settlement-row">
-              <span class="settlement-key">Abono en tu Binance Spot (`0xf730...c520`):</span>
-              <span id="summaryUsdtReceive" class="settlement-val emerald">3,000.00 USDT</span>
+              <span class="settlement-key">Abono Estimado en tu Binance Spot:</span>
+              <span id="summaryUsdtReceive" class="settlement-val emerald">~1,873.00 USDT</span>
             </div>
             <div class="settlement-row">
-              <span class="settlement-key">Liquidación P2P Estimada Hoy (T+0):</span>
-              <span id="summaryClpReceive" class="settlement-val">$2.865.000 CLP</span>
+              <span class="settlement-key">Equivalente CLP Hoy (T+0):</span>
+              <span id="summaryClpReceive" class="settlement-val">$1.919.550 CLP</span>
             </div>
           </div>
 
@@ -1337,7 +1203,7 @@
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
-            <span id="btnCopyClientLinkText">Copiar Link Blindado para el Cliente</span>
+            <span id="btnCopyClientLinkText">Copiar Link Corto para el Cliente</span>
           </button>
 
           <button type="button" class="btn-whatsapp" onclick="shareViaWhatsApp()">
@@ -1349,54 +1215,52 @@
         </div>
       </section>
 
-      <!-- RIGHT COLUMN: CLIENT CHECKOUT TERMINAL -->
+      <!-- RIGHT COLUMN: CLIENT CHECKOUT TERMINAL (100% IN-PAGE) -->
       <section class="luxury-card">
-        <!-- Invoice Hero Header -->
         <div class="invoice-hero">
           <div class="invoice-top-meta">
             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
               <span class="badge-emerald">
                 <span class="pulse-dot"></span>
-                ORDEN DE PAGO VERIFICADA · SHA-256
+                TERMINAL 3D-SECURE INTEGRADO · SIN SALIR DE SYNAPTIC
               </span>
               <span id="displayInvoiceId" style="font-family:var(--font-mono); font-size:12px; color:var(--text-secondary); font-weight:700;">
                 FOLIO #SYN-USD-9042
               </span>
             </div>
-            <span class="badge-gold">LIQUIDACIÓN INTERNACIONAL USD</span>
+            <span class="badge-gold">CUPO INTERNACIONAL USD</span>
           </div>
 
           <div class="invoice-main-grid">
-            <!-- Left Info -->
             <div>
-              <p class="client-For-label">Orden Emitida Para</p>
+              <p class="client-For-label">Orden de Pago Emitida Para</p>
               <h1 id="displayClientName" class="client-name-display">Cliente Corporativo</h1>
               <p id="displayConcept" class="concept-display">Servicios Tecnológicos & Consultoría Synaptic ERP</p>
 
               <div class="price-monolith">
-                <div class="price-label-sm">Total a Pagar (Cupo en Dólares)</div>
+                <div class="price-label-sm">Total Autorizado (Cupo en Dólares)</div>
                 <div class="price-usd-giant">
-                  $<span id="displayAmountUsd" style="font-size:42px; color:#ffffff; margin:0;">3,000.00</span><span>USD</span>
+                  $<span id="displayAmountUsd" style="font-size:38px; color:#ffffff; margin:0;">2,010.00</span><span>USD</span>
                 </div>
-                <div id="displayAmountClp" class="price-clp-sub">Equivalente Ref: $2.865.000 CLP</div>
+                <div id="displayAmountClp" class="price-clp-sub">Equivalente Ref: $1.919.550 CLP</div>
               </div>
             </div>
 
-            <!-- Right Interactive Black Titanium Card Preview -->
+            <!-- Interactive 3D Black Titanium Card -->
             <div class="titanium-card">
               <div class="card-top-row">
                 <div class="emv-chip"></div>
                 <span class="card-type-pill">USD INTL LIMIT</span>
               </div>
 
-              <div class="card-mid-row">
+              <div style="margin: 14px 0 10px;">
                 <div class="card-charge-caption">Cargo Internacional Autorizado</div>
-                <div id="cardPreviewAmount" class="card-charge-val">$3,000.00 USD</div>
+                <div id="cardPreviewAmount" class="card-charge-val">$2,010.00 USD</div>
               </div>
 
               <div class="card-bottom-row">
                 <div>
-                  <div style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.12em;">Titular / Empresa</div>
+                  <div style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.12em;">Titular de Tarjeta</div>
                   <div id="cardPreviewHolder" class="card-holder-name">CLIENTE CORPORATIVO</div>
                 </div>
                 <div class="card-circles">
@@ -1408,16 +1272,14 @@
           </div>
         </div>
 
-        <!-- Checkout Body -->
         <div class="checkout-body">
-          <!-- Method Switcher -->
           <div class="method-tabs">
             <button id="tabBtnCard" type="button" class="method-tab active-gold" onclick="switchPaymentTab('card')">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
                 <line x1="1" y1="10" x2="23" y2="10"></line>
               </svg>
-              <span>Tarjeta Chilena (Cupo en Dólares)</span>
+              <span>Pago con Tarjeta Chilena (Cupo USD en Página)</span>
             </button>
             <button id="tabBtnCrypto" type="button" class="method-tab" onclick="switchPaymentTab('crypto')">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -1430,106 +1292,110 @@
             </button>
           </div>
 
-          <!-- TAB 1: INTERNATIONAL USD CARD GATEWAYS -->
+          <!-- TAB 1: IN-PAGE NATIVE FORM + EMBEDDED TERMINAL -->
           <div id="tabContentCard">
-            <div class="split-control-bar">
-              <div class="split-info">
-                <h4>Modalidad de Cargo en Cupo Internacional USD</h4>
-                <p>Si el banco chileno tiene tope diario por transacción, puedes dividir el cobro en 2 tramos iguales.</p>
-              </div>
-              <div class="split-buttons">
-                <button id="splitBtn1" type="button" class="split-btn active" onclick="setSplitMode(1)">
-                  1 Pago (100%)
-                </button>
-                <button id="splitBtn2" type="button" class="split-btn" onclick="setSplitMode(2)">
-                  2 Pagos (50% / 50%)
-                </button>
-              </div>
-            </div>
+            <div class="embedded-checkout-grid">
+              <!-- Left: Native Synaptic Cardholder Form -->
+              <div class="native-form-box">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+                  <span style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:var(--gold-400);">
+                    1. Datos del Titular & Facturación
+                  </span>
+                  <span class="badge-emerald">Encriptado SSL</span>
+                </div>
 
-            <!-- 3 Gateways -->
-            <div class="gateway-list">
-              <!-- Gateway 1: Paybis -->
-              <div class="gateway-item recommended">
-                <div class="gateway-left">
-                  <div class="gateway-rank">01</div>
-                  <div>
-                    <div class="gateway-title-row">
-                      <span class="gateway-name">Paybis Corporate USD Checkout</span>
-                      <span class="badge-gold">RECOMENDADO CHILE · T+0</span>
-                    </div>
-                    <p class="gateway-desc">
-                      procesa Visa / Mastercard chilenas directo contra el <strong>cupo en dólares (USD)</strong> y liquida USDT en tu Binance.
-                    </p>
+                <div class="field-group" style="margin-top:0;">
+                  <label class="field-label">Nombre Completo en la Tarjeta</label>
+                  <input
+                    id="payerCardName"
+                    type="text"
+                    placeholder="Como aparece en su Visa / Mastercard"
+                    class="luxury-input"
+                    oninput="updateCardholderPreview()"
+                  />
+                </div>
+
+                <div class="form-row-2">
+                  <div class="field-group">
+                    <label class="field-label">Correo para Comprobante</label>
+                    <input
+                      id="payerEmail"
+                      type="email"
+                      placeholder="finanzas@empresa.cl"
+                      class="luxury-input"
+                    />
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label">RUT / ID Tributario</label>
+                    <input
+                      id="payerRut"
+                      type="text"
+                      placeholder="76.XXX.XXX-X"
+                      class="luxury-input"
+                    />
                   </div>
                 </div>
-                <button type="button" class="btn-pay-rail" onclick="launchCardCheckout('paybis')">
-                  <span class="rail-btn-label">Pagar $3,000.00 USD</span>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </button>
-              </div>
 
-              <!-- Gateway 2: MoonPay -->
-              <div class="gateway-item">
-                <div class="gateway-left">
-                  <div class="gateway-rank emerald">02</div>
-                  <div>
-                    <div class="gateway-title-row">
-                      <span class="gateway-name">MoonPay International USD Rail</span>
-                      <span class="badge-emerald">APPLE PAY / GOOGLE PAY / VISA</span>
-                    </div>
-                    <p class="gateway-desc">
-                      Pasarela alternativa de alta aprobación para tarjetas Santander, Banco de Chile, BCI, Itaú y Scotiabank.
-                    </p>
+                <div class="field-group">
+                  <label class="field-label">Banco Emisor de la Tarjeta (Chile / Intl)</label>
+                  <select id="payerBank" class="luxury-select">
+                    <option value="santander">Banco Santander Chile (Visa / Mastercard USD)</option>
+                    <option value="chile">Banco de Chile / Edwards (Cupo Internacional USD)</option>
+                    <option value="bci">Banco BCI (Cupo en Dólares)</option>
+                    <option value="itau">Banco Itaú (Cupo Internacional USD)</option>
+                    <option value="scotiabank">Scotiabank Chile (Cupo en Dólares)</option>
+                    <option value="bice">Banco BICE / Security</option>
+                    <option value="cmr">CMR Falabella / Ripley Mastercard</option>
+                    <option value="other">Otra Tarjeta Corporativa / Internacional</option>
+                  </select>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">Modalidad de Cargo (Según Tope Diario de su Banco)</label>
+                  <div class="split-buttons">
+                    <button id="splitBtn1" type="button" class="split-btn active" onclick="setSplitMode(1)">
+                      Pago Único (100%)
+                    </button>
+                    <button id="splitBtn2" type="button" class="split-btn" onclick="setSplitMode(2)">
+                      2 Tramos (50% / 50%)
+                    </button>
                   </div>
                 </div>
-                <button type="button" class="btn-pay-rail secondary" onclick="launchCardCheckout('moonpay')">
-                  <span class="rail-btn-label">Pagar $3,000.00 USD</span>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </button>
-              </div>
 
-              <!-- Gateway 3: Transak -->
-              <div class="gateway-item">
-                <div class="gateway-left">
-                  <div class="gateway-rank blue">03</div>
+                <button type="button" class="btn-gold-primary" onclick="refreshEmbeddedTerminal()">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span id="btnApplyTerminalText">Sincronizar Monto en Terminal 3DS ($2,010.00 USD)</span>
+                </button>
+
+                <div class="vault-bar">
                   <div>
-                    <div class="gateway-title-row">
-                      <span class="gateway-name">Transak Global Settlement</span>
-                      <span class="badge-gold">RESPALDO CORPORATIVO</span>
+                    <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-secondary);">
+                      Bóveda Corporativa Destino (Bloqueada por Contrato)
                     </div>
-                    <p class="gateway-desc">
-                      Liquidación directa a bóveda `0xf730...c520` en red Polygon POS (`...58e8F`).
-                    </p>
+                    <div class="vault-addr">0xf730319057663fc62bc6dfc75bd3857e380dc520</div>
                   </div>
+                  <button type="button" class="btn-copy-sm" onclick="copyVaultAddress()">
+                    <span id="copyAddrBtnText">Copiar</span>
+                  </button>
                 </div>
-                <button type="button" class="btn-pay-rail secondary" onclick="launchCardCheckout('transak')">
-                  <span class="rail-btn-label">Pagar $3,000.00 USD</span>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </button>
               </div>
-            </div>
 
-            <!-- Vault Address Lock Bar -->
-            <div class="vault-bar">
-              <div>
-                <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-secondary);">
-                  Bóveda Destino Pre-Cargada (Binance Spot USDT · Polygon POS / ERC20)
+              <!-- Right: Embedded In-Page 3D-Secure Card Terminal -->
+              <div class="iframe-terminal-shell">
+                <div class="iframe-terminal-header">
+                  <span>2. Terminal Embebido 3D-Secure (USD)</span>
+                  <span style="color:var(--emerald-400); font-family:var(--font-mono);">PCI-DSS LEVEL 1</span>
                 </div>
-                <div class="vault-addr">0xf730319057663fc62bc6dfc75bd3857e380dc520</div>
+                <iframe
+                  id="embeddedOnramperFrame"
+                  class="embedded-iframe"
+                  allow="accelerometer; autoplay; camera; gyroscope; payment; microphone"
+                  title="Terminal Embebido Synaptic USD"
+                ></iframe>
               </div>
-              <button type="button" class="btn-copy-sm" onclick="copyVaultAddress()">
-                <span id="copyAddrBtnText">Copiar Dirección</span>
-              </button>
             </div>
           </div>
 
@@ -1614,10 +1480,18 @@
 
   <script>
     const VAULT_ADDRESS = '0xf730319057663fc62bc6dfc75bd3857e380dc520';
+    const DEFAULT_CLIENT = 'Cliente Corporativo';
+    const DEFAULT_CONCEPT = 'Servicios Tecnológicos & Consultoría Synaptic ERP';
+    const DEFAULT_FOLIO = 'SYN-USD-9042';
+    const CLOUD_BASE_URL = 'https://sinsynaoticout.github.io/usd/cobro-usd.html';
+    const GATEWAY_FEE_FACTOR = 1.072; // ~6.8% gateway + network fee buffer so net equals target
+
     let usdClpRate = 955;
     let splitParts = 1;
+    let passThroughFee = false;
     let isClientViewLocked = false;
     let selectedNet = 'polygon';
+    let iframeTimer = null;
 
     function formatUsd(val) {
       return Number(val || 0).toLocaleString('en-US', {
@@ -1630,9 +1504,14 @@
       return Math.round(Number(val || 0)).toLocaleString('es-CL');
     }
 
-    function getCurrentAmount() {
+    function getBaseAmount() {
       const raw = parseFloat(document.getElementById('inputAmountUsd').value);
       return Number.isFinite(raw) && raw > 0 ? raw : 0;
+    }
+
+    function getEffectiveChargeUsd() {
+      const base = getBaseAmount();
+      return passThroughFee ? Math.ceil(base * GATEWAY_FEE_FACTOR) : base;
     }
 
     function setQuickAmount(amount) {
@@ -1641,9 +1520,17 @@
     }
 
     function adjustAmount(delta) {
-      const current = getCurrentAmount();
+      const current = getBaseAmount();
       const next = Math.max(10, current + delta);
       document.getElementById('inputAmountUsd').value = String(next);
+      syncInvoiceState();
+    }
+
+    function setFeePassThrough(enabled) {
+      passThroughFee = enabled;
+      document.getElementById('feeBtnExact').classList.toggle('active', !enabled);
+      document.getElementById('feeBtnNet').classList.toggle('active', enabled);
+      document.getElementById('feeBadgeText').textContent = enabled ? 'Recibir 100% Neto (+Fee)' : 'Cargo Exacto';
       syncInvoiceState();
     }
 
@@ -1654,77 +1541,94 @@
       syncInvoiceState();
     }
 
-    function syncInvoiceState() {
-      const amount = getCurrentAmount();
-      const clientName = document.getElementById('inputClientName').value.trim() || 'Cliente Corporativo';
-      const concept = document.getElementById('inputConcept').value.trim() || 'Servicios Profesionales';
-      const invoiceId = document.getElementById('inputInvoiceId').value.trim() || 'SYN-USD-9042';
-      const clpTotal = amount * usdClpRate;
-      const trancheAmount = splitParts === 2 ? amount / 2 : amount;
+    function updateCardholderPreview() {
+      const customHolder = document.getElementById('payerCardName').value.trim();
+      const fallback = document.getElementById('inputClientName').value.trim() || DEFAULT_CLIENT;
+      document.getElementById('cardPreviewHolder').textContent = (customHolder || fallback).toUpperCase();
+    }
 
-      // Highlight active preset
+    function syncInvoiceState() {
+      const baseAmount = getBaseAmount();
+      const totalChargeUsd = getEffectiveChargeUsd();
+      const estimatedNetUsdt = passThroughFee ? baseAmount : baseAmount * 0.932;
+      const clientName = document.getElementById('inputClientName').value.trim() || DEFAULT_CLIENT;
+      const concept = document.getElementById('inputConcept').value.trim() || DEFAULT_CONCEPT;
+      const invoiceId = document.getElementById('inputInvoiceId').value.trim() || DEFAULT_FOLIO;
+      const clpTotal = totalChargeUsd * usdClpRate;
+      const trancheAmount = splitParts === 2 ? totalChargeUsd / 2 : totalChargeUsd;
+
       document.querySelectorAll('.preset-chip').forEach((btn) => {
         const presetVal = parseFloat(btn.getAttribute('data-amt'));
-        btn.classList.toggle('active', Math.abs(presetVal - amount) < 0.01);
+        btn.classList.toggle('active', Math.abs(presetVal - baseAmount) < 0.01);
       });
 
-      // Left summary
-      document.getElementById('summaryUsdCharge').textContent = '$' + formatUsd(amount) + ' USD';
-      document.getElementById('summaryUsdtReceive').textContent = formatUsd(amount) + ' USDT';
+      document.getElementById('summaryUsdCharge').textContent = '$' + formatUsd(totalChargeUsd) + ' USD';
+      document.getElementById('summaryUsdtReceive').textContent = '~' + formatUsd(estimatedNetUsdt) + ' USDT';
       document.getElementById('summaryClpReceive').textContent = '$' + formatClp(clpTotal) + ' CLP';
 
-      // Right Checkout Display
       document.getElementById('displayInvoiceId').textContent = 'FOLIO #' + invoiceId;
       document.getElementById('displayClientName').textContent = clientName;
       document.getElementById('displayConcept').textContent = concept;
-      document.getElementById('displayAmountUsd').textContent = formatUsd(amount);
+      document.getElementById('displayAmountUsd').textContent = formatUsd(totalChargeUsd);
       document.getElementById('displayAmountClp').textContent =
         'Equivalente Ref: $' + formatClp(clpTotal) + ' CLP (Tasa $' + formatClp(usdClpRate) + ' CLP/USD)';
 
-      // 3D Titanium Card
       document.getElementById('cardPreviewAmount').textContent =
         splitParts === 2
           ? '2 x $' + formatUsd(trancheAmount) + ' USD'
-          : '$' + formatUsd(amount) + ' USD';
-      document.getElementById('cardPreviewHolder').textContent = clientName.toUpperCase();
+          : '$' + formatUsd(totalChargeUsd) + ' USD';
 
-      // Update Gateway Buttons
-      document.querySelectorAll('.rail-btn-label').forEach((span) => {
-        span.textContent =
-          splitParts === 2
-            ? 'Pagar Tramo $' + formatUsd(trancheAmount) + ' USD'
-            : 'Pagar $' + formatUsd(amount) + ' USD';
-      });
+      updateCardholderPreview();
+
+      document.getElementById('btnApplyTerminalText').textContent =
+        splitParts === 2
+          ? 'Cargar Tramo de $' + formatUsd(trancheAmount) + ' USD en Terminal →'
+          : 'Cargar $' + formatUsd(totalChargeUsd) + ' USD en Terminal 3DS →';
+
+      clearTimeout(iframeTimer);
+      iframeTimer = setTimeout(refreshEmbeddedTerminal, 350);
     }
 
-    const DEFAULT_CLIENT = 'Cliente Corporativo';
-    const DEFAULT_CONCEPT = 'Servicios Tecnológicos & Consultoría Synaptic ERP';
-    const DEFAULT_FOLIO = 'SYN-USD-9042';
-    const CLOUD_BASE_URL = 'https://sinsynaoticout.github.io/usd';
+    function refreshEmbeddedTerminal() {
+      const totalChargeUsd = getEffectiveChargeUsd();
+      const trancheAmount = Math.round((splitParts === 2 ? totalChargeUsd / 2 : totalChargeUsd) * 100) / 100;
+      const frame = document.getElementById('embeddedOnramperFrame');
+      const widgetUrl =
+        'https://buy.onramper.com/?mode=buy' +
+        '&defaultCrypto=usdt_polygon' +
+        '&defaultFiat=usd' +
+        '&defaultAmount=' + encodeURIComponent(trancheAmount) +
+        '&wallets=' + encodeURIComponent('usdt_polygon:' + VAULT_ADDRESS + ',usdt_ethereum:' + VAULT_ADDRESS) +
+        '&networkWallets=' + encodeURIComponent('polygon:' + VAULT_ADDRESS + ',ethereum:' + VAULT_ADDRESS) +
+        '&onlyCryptos=usdt_polygon,usdt_ethereum' +
+        '&isAmountEditable=false' +
+        '&themeName=dark' +
+        '&containerColor=0b0f19' +
+        '&primaryColor=f59e0b' +
+        '&cardColor=111827' +
+        '&primaryTextColor=f8fafc' +
+        '&secondaryTextColor=94a3b8' +
+        '&borderRadius=0.75';
+
+      if (frame.getAttribute('data-current-src') !== widgetUrl) {
+        frame.setAttribute('data-current-src', widgetUrl);
+        frame.src = widgetUrl;
+      }
+    }
 
     function buildLockedClientUrl() {
-      const amount = getCurrentAmount();
+      const chargeAmount = getEffectiveChargeUsd();
       const clientName = document.getElementById('inputClientName').value.trim() || DEFAULT_CLIENT;
       const concept = document.getElementById('inputConcept').value.trim() || DEFAULT_CONCEPT;
       const invoiceId = document.getElementById('inputInvoiceId').value.trim() || DEFAULT_FOLIO;
 
-      const isTunnelOrLocal =
-        window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1' ||
-        window.location.hostname.endsWith('.lhr.life') ||
-        window.location.hostname.endsWith('.serveousercontent.com');
-
-      const base = isTunnelOrLocal
-        ? CLOUD_BASE_URL
-        : window.location.origin + window.location.pathname.replace(/\/(index|cobro-usd)\.html$/, '');
-
       const params = new URLSearchParams();
-      params.set('u', String(amount));
+      params.set('u', String(chargeAmount));
       if (clientName !== DEFAULT_CLIENT) params.set('n', clientName);
       if (concept !== DEFAULT_CONCEPT) params.set('c', concept);
       if (invoiceId !== DEFAULT_FOLIO) params.set('f', invoiceId);
 
-      return base.replace(/\/$/, '') + '/?' + params.toString();
+      return CLOUD_BASE_URL + '?' + params.toString();
     }
 
     async function copyLockedClientLink() {
@@ -1733,20 +1637,20 @@
         await navigator.clipboard.writeText(url);
       } catch (_) {}
       const txt = document.getElementById('btnCopyClientLinkText');
-      txt.textContent = '¡Link Blindado Copiado al Portapapeles!';
+      txt.textContent = '¡Link Corto Copiado (' + url.split('?')[1] + ')!';
       setTimeout(() => {
-        txt.textContent = 'Copiar Link Blindado para el Cliente';
+        txt.textContent = 'Copiar Link Corto para el Cliente';
       }, 2800);
     }
 
     function shareViaWhatsApp() {
       const url = buildLockedClientUrl();
-      const amount = formatUsd(getCurrentAmount());
+      const amount = formatUsd(getEffectiveChargeUsd());
       const client = document.getElementById('inputClientName').value.trim() || 'Cliente';
       const concept = document.getElementById('inputConcept').value.trim() || 'Servicios Profesionales';
       const text =
-        'Hola ' + client + ', te comparto el link oficial de pago internacional en dólares por *USD $' +
-        amount + '* (' + concept + '). Puedes pagar con el cupo en dólares de tu tarjeta chilena aquí: ' + url;
+        'Hola ' + client + ', te comparto el enlace directo de pago internacional en dólares por *USD $' +
+        amount + '* (' + concept + '). Puedes digitar y autorizar el pago con el cupo en dólares de tu tarjeta directamente dentro del portal: ' + url;
       window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer');
     }
 
@@ -1775,10 +1679,8 @@
       document.getElementById('tabContentCard').classList.toggle('hidden', !isCard);
       document.getElementById('tabContentCrypto').classList.toggle('hidden', isCard);
 
-      const btnCard = document.getElementById('tabBtnCard');
-      const btnCrypto = document.getElementById('tabBtnCrypto');
-      btnCard.className = isCard ? 'method-tab active-gold' : 'method-tab';
-      btnCrypto.className = !isCard ? 'method-tab active-emerald' : 'method-tab';
+      document.getElementById('tabBtnCard').className = isCard ? 'method-tab active-gold' : 'method-tab';
+      document.getElementById('tabBtnCrypto').className = !isCard ? 'method-tab active-emerald' : 'method-tab';
     }
 
     async function copyVaultAddress() {
@@ -1787,35 +1689,11 @@
       } catch (_) {}
       const label = document.getElementById('copyAddrBtnText');
       if (label) {
-        label.textContent = '¡Dirección Copiada!';
+        label.textContent = '¡Copiada!';
         setTimeout(() => {
-          label.textContent = 'Copiar Dirección';
-        }, 2200);
+          label.textContent = 'Copiar';
+        }, 2000);
       }
-    }
-
-    async function launchCardCheckout(provider) {
-      await copyVaultAddress();
-      const total = getCurrentAmount();
-      const chargeAmount = (splitParts === 2 ? total / 2 : total).toFixed(2);
-      let targetUrl = '';
-      if (provider === 'paybis') {
-        targetUrl =
-          'https://paybis.com/buy-tether-polygon/?currency=USD&amount=' +
-          encodeURIComponent(chargeAmount) +
-          '&cryptoAddress=' + encodeURIComponent(VAULT_ADDRESS);
-      } else if (provider === 'moonpay') {
-        targetUrl =
-          'https://buy.moonpay.com/?currencyCode=usdt_polygon&baseCurrencyCode=usd&baseCurrencyAmount=' +
-          encodeURIComponent(chargeAmount) +
-          '&walletAddress=' + encodeURIComponent(VAULT_ADDRESS);
-      } else {
-        targetUrl =
-          'https://global.transak.com/?cryptoCurrencyCode=USDT&network=polygon&fiatCurrency=USD&fiatAmount=' +
-          encodeURIComponent(chargeAmount) +
-          '&walletAddress=' + encodeURIComponent(VAULT_ADDRESS);
-      }
-      window.open(targetUrl, '_blank', 'noopener,noreferrer');
     }
 
     function selectCryptoNetwork(net) {
@@ -1826,13 +1704,12 @@
         net === 'polygon' ? 'Red: Polygon POS (...58e8F)' : 'Red: Ethereum ERC20 (...31ec7)';
     }
 
-    // Generate deterministic SVG QR representation + fallback to QR image
     function renderQrGraphic() {
       const container = document.getElementById('qrSvgContainer');
       const img = document.createElement('img');
       img.alt = 'QR Bóveda USDT';
-      img.width = 188;
-      img.height = 188;
+      img.width = 184;
+      img.height = 184;
       img.style.borderRadius = '10px';
       img.src =
         'https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=6&data=' +
@@ -1845,7 +1722,7 @@
       const btn = document.getElementById('btnVerifyChain');
       const feedback = document.getElementById('verifyFeedback');
       const txHash = document.getElementById('txHashInput').value.trim();
-      const expected = getCurrentAmount();
+      const expected = getBaseAmount();
 
       btn.disabled = true;
       btn.textContent = 'Auditando...';
@@ -1874,34 +1751,16 @@
             return;
           }
         }
-        feedback.className = 'toast-feedback warn';
-        feedback.textContent =
-          'Aún no se detecta el ingreso de ' +
-          formatUsd(expected) +
-          ' USDT en los últimos bloques. Si el cliente acaba de pagar con tarjeta, demora entre 1 y 3 minutos en acreditarse.';
-      } catch (_) {
-        feedback.className = 'toast-feedback warn';
-        feedback.textContent =
-          'Verificador listo. Revisa tu app de Binance Spot (0xf730...c520) o vuelve a pulsar en unos segundos.';
-      }
+      } catch (_) {}
+
+      feedback.className = 'toast-feedback warn';
+      feedback.textContent =
+        'Verificando bloques recientes en Polygon POS (0xf730...c520). Si el cliente acaba de autorizar con su tarjeta, la liquidación demora de 1 a 3 minutos.';
       btn.disabled = false;
       btn.textContent = 'Verificar Recepción';
     }
 
     async function loadLiveRate() {
-      try {
-        const res = await fetch('/api/payments/usd-link');
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.usdClpRate) {
-            usdClpRate = Number(data.usdClpRate);
-            document.getElementById('liveRateBadge').textContent = '$' + formatClp(usdClpRate) + ' CLP';
-            syncInvoiceState();
-            return;
-          }
-        }
-      } catch (_) {}
-
       try {
         const res2 = await fetch('https://open.er-api.com/v6/latest/USD');
         if (res2.ok) {
@@ -1910,6 +1769,7 @@
             usdClpRate = Math.round(Number(data2.rates.CLP));
             document.getElementById('liveRateBadge').textContent = '$' + formatClp(usdClpRate) + ' CLP';
             syncInvoiceState();
+            return;
           }
         }
       } catch (_) {}
@@ -1945,6 +1805,7 @@
       }
       renderQrGraphic();
       syncInvoiceState();
+      refreshEmbeddedTerminal();
       loadLiveRate();
     })();
   </script>
