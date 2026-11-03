@@ -796,9 +796,11 @@
                     min="10"
                     max="100000"
                     value="2010"
-                    style="background:transparent; border:none; border-bottom:1px dashed rgba(245,158,11,0.5); outline:none; font-family:var(--font-mono); font-size:28px; font-weight:800; color:#ffffff; width:150px; letter-spacing:-0.03em; padding:0 2px;"
+                    style="background:transparent; border:none; border-bottom:1px dashed rgba(245,158,11,0.5); outline:none; font-family:var(--font-mono); font-size:28px; font-weight:800; color:#ffffff; width:175px; letter-spacing:-0.03em; padding:0 2px;"
                     onclick="event.stopPropagation()"
                     oninput="syncFromInline(this.value)"
+                    onkeyup="syncFromInline(this.value)"
+                    onchange="syncFromInline(this.value)"
                   />
                   <span style="font-size:13px; color:var(--gold-400); font-family:var(--font-mono); font-weight:700;">USD</span>
                 </div>
@@ -1146,7 +1148,7 @@
     let usdClpRate = 991;
     let splitParts = 1;
     let passThroughFee = false;
-    let selectedRail = 'paybis';
+    let selectedRail = 'direct';
     let selectedNet = 'polygon';
 
     function formatUsd(val) {
@@ -1161,7 +1163,13 @@
     }
 
     function getBaseAmount() {
-      const raw = parseFloat(document.getElementById('inputAmountUsd').value);
+      const inlineEl = document.getElementById('inlineAmountUsd');
+      if (inlineEl && document.activeElement === inlineEl) {
+        const rawInline = parseFloat(inlineEl.value);
+        if (Number.isFinite(rawInline) && rawInline > 0) return rawInline;
+      }
+      const inputEl = document.getElementById('inputAmountUsd');
+      const raw = inputEl ? parseFloat(inputEl.value) : 0;
       return Number.isFinite(raw) && raw > 0 ? raw : 0;
     }
 
@@ -1176,6 +1184,8 @@
 
     function setQuickAmount(amount) {
       document.getElementById('inputAmountUsd').value = String(amount);
+      const inlineEl = document.getElementById('inlineAmountUsd');
+      if (inlineEl) inlineEl.value = String(amount);
       syncInvoiceState();
     }
 
@@ -1192,8 +1202,6 @@
       document.getElementById('splitBtn2').classList.toggle('active', parts === 2);
       syncInvoiceState();
     }
-
-    let selectedRail = 'direct';
 
     function setRailProvider(provider) {
       selectedRail = provider;
@@ -1442,6 +1450,8 @@
         const parsed = parseFloat(shortUsd);
         if (Number.isFinite(parsed) && parsed > 0) {
           document.getElementById('inputAmountUsd').value = String(parsed);
+          const inlineEl = document.getElementById('inlineAmountUsd');
+          if (inlineEl) inlineEl.value = String(parsed);
         }
         if (params.get('n')) document.getElementById('inputClientName').value = params.get('n');
         if (params.get('c')) document.getElementById('inputConcept').value = params.get('c');
@@ -1450,7 +1460,11 @@
       } else if (inv) {
         try {
           const decoded = JSON.parse(decodeURIComponent(escape(atob(inv))));
-          if (decoded.a) document.getElementById('inputAmountUsd').value = String(decoded.a);
+          if (decoded.a) {
+            document.getElementById('inputAmountUsd').value = String(decoded.a);
+            const inlineEl = document.getElementById('inlineAmountUsd');
+            if (inlineEl) inlineEl.value = String(decoded.a);
+          }
           if (decoded.n) document.getElementById('inputClientName').value = decoded.n;
           if (decoded.c) document.getElementById('inputConcept').value = decoded.c;
           if (decoded.id) document.getElementById('inputInvoiceId').value = decoded.id;
