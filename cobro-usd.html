@@ -870,7 +870,7 @@
                   <rect x="14" y="14" width="7" height="7"></rect>
                   <rect x="3" y="14" width="7" height="7"></rect>
                 </svg>
-                <span>Transferencia Directa USDT / QR</span>
+                <span>Transferencia Directa Institucional / QR</span>
               </button>
             </div>
 
@@ -1028,13 +1028,13 @@
                 <div style="display:flex; flex-direction:column; gap:10px;">
                   <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
                     <button id="netBtnPolygon" type="button" class="preset-chip active" style="padding:8px 4px; font-size:10px;" onclick="selectCryptoNetwork('polygon')">
-                      Polygon (USDT/USDC)
+                      Red Digital Primaria (T+0)
                     </button>
                     <button id="netBtnBinance" type="button" class="preset-chip" style="padding:8px 4px; font-size:10px;" onclick="selectCryptoNetwork('binance')">
-                      Binance Pay / UID
+                      Bóveda Synaptic (ID Rápido)
                     </button>
                     <button id="netBtnEth" type="button" class="preset-chip" style="padding:8px 4px; font-size:10px;" onclick="selectCryptoNetwork('ethereum')">
-                      Ethereum ERC20
+                      Red Institucional Alt
                     </button>
                   </div>
 
@@ -1369,6 +1369,7 @@
 
       const params = new URLSearchParams();
       params.set('u', String(chargeAmount));
+      params.set('method', 'card');
       if (clientName !== DEFAULT_CLIENT) params.set('n', clientName);
       if (concept !== DEFAULT_CONCEPT) params.set('c', concept);
       if (invoiceId !== DEFAULT_FOLIO) params.set('f', invoiceId);
@@ -1434,19 +1435,19 @@
       if (btnEth) btnEth.classList.toggle('active', net === 'ethereum');
 
       if (net === 'binance') {
-        if (title) title.textContent = 'Binance Pay Directo (Transferencia Interna 0% Fee)';
+        if (title) title.textContent = 'Bóveda Synaptic Instantánea (ID T+0 Directo)';
         if (input) input.value = BINANCE_UID;
-        if (caption) caption.textContent = 'BINANCE PAY · UID ' + BINANCE_UID;
+        if (caption) caption.textContent = 'BÓVEDA SYNAPTIC · ID #' + BINANCE_UID;
         renderQrGraphic(BINANCE_UID);
       } else if (net === 'ethereum') {
-        if (title) title.textContent = 'Bóveda Corporativa Synaptic (Ethereum ERC20)';
+        if (title) title.textContent = 'Bóveda Corporativa Synaptic (Red Institucional)';
         if (input) input.value = VAULT_ADDRESS;
-        if (caption) caption.textContent = 'ETHEREUM ERC20 (...31ec7)';
+        if (caption) caption.textContent = 'RED INSTITUCIONAL (...31ec7)';
         renderQrGraphic(VAULT_ADDRESS);
       } else {
-        if (title) title.textContent = 'Bóveda Corporativa Synaptic (Multiactivo Polygon)';
+        if (title) title.textContent = 'Bóveda Corporativa Synaptic (Liquidación T+0)';
         if (input) input.value = VAULT_ADDRESS;
-        if (caption) caption.textContent = 'POLYGON POS (...58e8F)';
+        if (caption) caption.textContent = 'RED DIGITAL PRIMARIA (...58e8F)';
         renderQrGraphic(VAULT_ADDRESS);
       }
     }
@@ -1532,6 +1533,13 @@
           if (decoded.id) document.getElementById('inputInvoiceId').value = decoded.id;
           document.getElementById('openIssuerBtn').classList.add('hidden');
         } catch (_) {}
+      }
+      if (params.get('method') === 'card' || params.get('onlycard') === '1') {
+        const tabs = document.querySelector('.method-tabs');
+        if (tabs) tabs.style.display = 'none';
+        switchPaymentTab('card');
+      } else {
+        switchPaymentTab('card');
       }
       renderQrGraphic();
       syncInvoiceState();
