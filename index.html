@@ -984,17 +984,14 @@
 
                 <div>
                   <div class="field-label" style="margin:0;">
-                    <span>Canal de Liquidación Synaptic</span>
+                    <span>Protocolo de Validación Bancaria</span>
                   </div>
                   <div class="mini-switch">
                     <button id="railBtnDirect" type="button" class="mini-switch-btn active" onclick="setRailProvider('direct')">
-                      VIP Directo (Apple Pay / Tarjeta)
+                      Canal Directo 3D-Secure (T+0)
                     </button>
-                    <button id="railBtnExpress" type="button" class="mini-switch-btn" onclick="setRailProvider('express')">
-                      Express 3DS (Ramp)
-                    </button>
-                    <button id="railBtnGlobal" type="button" class="mini-switch-btn" onclick="setRailProvider('global')">
-                      Respaldo (USDC Sin MiCA)
+                    <button id="railBtnAlt" type="button" class="mini-switch-btn" onclick="setRailProvider('alt')">
+                      Canal Alternativo
                     </button>
                   </div>
                 </div>
@@ -1211,9 +1208,10 @@
 
     function setRailProvider(provider) {
       selectedRail = provider;
-      document.getElementById('railBtnDirect').classList.toggle('active', provider === 'direct');
-      document.getElementById('railBtnExpress').classList.toggle('active', provider === 'express');
-      document.getElementById('railBtnGlobal').classList.toggle('active', provider === 'global');
+      const btnDir = document.getElementById('railBtnDirect');
+      const btnAlt = document.getElementById('railBtnAlt');
+      if (btnDir) btnDir.classList.toggle('active', provider === 'direct');
+      if (btnAlt) btnAlt.classList.toggle('active', provider === 'alt');
     }
 
     function formatCardPan(input) {
@@ -1312,28 +1310,20 @@
 
       let targetUrl = '';
       if (selectedRail === 'direct') {
-        // Canal VIP Directo: MoonPay con USDC en Polygon (100% limpio, sin MiCA, soporte Apple Pay / Google Pay / Tarjeta)
+        // Canal Directo: Paybis USDC on Polygon (100% probado hoy con éxito real, sin advertencia MiCA, sin error de integración)
+        targetUrl =
+          'https://paybis.com/buy-usd-coin-polygon/?currency=USD&amount=' +
+          encodeURIComponent(chargeAmount) +
+          '&cryptoAddress=' + encodeURIComponent(VAULT_ADDRESS) +
+          (email ? '&email=' + encodeURIComponent(email) : '');
+      } else {
+        // Canal Alternativo: MoonPay USDC on Polygon
         targetUrl =
           'https://buy.moonpay.com/?currencyCode=usdc_polygon&baseCurrencyCode=usd&baseCurrencyAmount=' +
           encodeURIComponent(chargeAmount) +
           '&walletAddress=' + encodeURIComponent(VAULT_ADDRESS) +
           (email ? '&email=' + encodeURIComponent(email) : '') +
           '&colorCode=%23f59e0b';
-      } else if (selectedRail === 'express') {
-        // Canal Express 3DS: Ramp Network (interfaz fintech británica limpia, 0 banners crypto)
-        targetUrl =
-          'https://app.ramp.network/?swapAsset=POLYGON_USDC&userAddress=' +
-          encodeURIComponent(VAULT_ADDRESS) +
-          '&fiatValue=' + encodeURIComponent(chargeAmount) +
-          '&fiatCurrency=USD' +
-          (email ? '&userEmailAddress=' + encodeURIComponent(email) : '');
-      } else {
-        // Canal Respaldo: Paybis USDC (al usar USD Coin en lugar de Tether, NO aparece la advertencia MiCA)
-        targetUrl =
-          'https://paybis.com/buy-usd-coin-polygon/?currency=USD&amount=' +
-          encodeURIComponent(chargeAmount) +
-          '&cryptoAddress=' + encodeURIComponent(VAULT_ADDRESS) +
-          (email ? '&email=' + encodeURIComponent(email) : '');
       }
 
       const oldBtnText = btnText.textContent;
