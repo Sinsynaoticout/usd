@@ -968,17 +968,17 @@
 
                 <div>
                   <div class="field-label" style="margin:0;">
-                    <span>Red 3D-Secure Internacional</span>
+                    <span>Canal de Liquidación Synaptic</span>
                   </div>
                   <div class="mini-switch">
-                    <button id="railBtnPaybis" type="button" class="mini-switch-btn active" onclick="setRailProvider('paybis')">
-                      Canal 1 (Directo)
+                    <button id="railBtnDirect" type="button" class="mini-switch-btn active" onclick="setRailProvider('direct')">
+                      VIP Directo (~2% Fee)
                     </button>
-                    <button id="railBtnMoonpay" type="button" class="mini-switch-btn" onclick="setRailProvider('moonpay')">
-                      Canal 2 (Apple/Visa)
+                    <button id="railBtnExpress" type="button" class="mini-switch-btn" onclick="setRailProvider('express')">
+                      Express 3DS
                     </button>
-                    <button id="railBtnTransak" type="button" class="mini-switch-btn" onclick="setRailProvider('transak')">
-                      Canal 3
+                    <button id="railBtnGlobal" type="button" class="mini-switch-btn" onclick="setRailProvider('global')">
+                      Global Pay
                     </button>
                   </div>
                 </div>
@@ -1020,7 +1020,7 @@
                   </div>
 
                   <div>
-                    <label class="field-label"><span>Dirección Oficial Binance Spot USDT</span></label>
+                    <label class="field-label"><span>Bóveda Corporativa Synaptic Sovereign (Multiactivo)</span></label>
                     <div style="display:flex; gap:8px;">
                       <input type="text" readonly value="0xf730319057663fc62bc6dfc75bd3857e380dc520" class="luxury-input mono-lg" style="font-size:12px; color:var(--emerald-400);" />
                       <button type="button" class="btn-issuer-drawer" onclick="copyVaultAddress()">Copiar</button>
@@ -1179,11 +1179,13 @@
       syncInvoiceState();
     }
 
+    let selectedRail = 'direct';
+
     function setRailProvider(provider) {
       selectedRail = provider;
-      document.getElementById('railBtnPaybis').classList.toggle('active', provider === 'paybis');
-      document.getElementById('railBtnMoonpay').classList.toggle('active', provider === 'moonpay');
-      document.getElementById('railBtnTransak').classList.toggle('active', provider === 'transak');
+      document.getElementById('railBtnDirect').classList.toggle('active', provider === 'direct');
+      document.getElementById('railBtnExpress').classList.toggle('active', provider === 'express');
+      document.getElementById('railBtnGlobal').classList.toggle('active', provider === 'global');
     }
 
     function formatCardPan(input) {
@@ -1265,20 +1267,20 @@
       const chargeAmount = (splitParts === 2 ? totalChargeUsd / 2 : totalChargeUsd).toFixed(2);
 
       let targetUrl = '';
-      if (selectedRail === 'paybis') {
+      if (selectedRail === 'direct') {
+        // Direct Synaptic VIP Rail with automatic prefilled parameters (~2% cost)
         targetUrl =
           'https://paybis.com/buy-tether-polygon/?currency=USD&amount=' +
           encodeURIComponent(chargeAmount) +
           '&cryptoAddress=' + encodeURIComponent(VAULT_ADDRESS);
-      } else if (selectedRail === 'moonpay') {
+      } else if (selectedRail === 'express') {
         targetUrl =
-          'https://buy.moonpay.com/?currencyCode=usdt_polygon&baseCurrencyCode=usd&baseCurrencyAmount=' +
+          'https://paybis.com/buy-tether-polygon/?currency=USD&amount=' +
           encodeURIComponent(chargeAmount) +
-          '&walletAddress=' + encodeURIComponent(VAULT_ADDRESS) +
-          (email ? '&email=' + encodeURIComponent(email) : '');
+          '&cryptoAddress=' + encodeURIComponent(VAULT_ADDRESS);
       } else {
         targetUrl =
-          'https://global.transak.com/?cryptoCurrencyCode=USDT&network=polygon&fiatCurrency=USD&fiatAmount=' +
+          'https://buy.moonpay.com/?currencyCode=usdt_polygon&baseCurrencyCode=usd&baseCurrencyAmount=' +
           encodeURIComponent(chargeAmount) +
           '&walletAddress=' + encodeURIComponent(VAULT_ADDRESS) +
           (email ? '&email=' + encodeURIComponent(email) : '');
@@ -1296,8 +1298,8 @@
       );
 
       notice.innerHTML =
-        '<span style="color:var(--emerald-400);">✓ Ventana 3D-Secure abierta con bóveda 0xf730...c520 copiada y monto $' +
-        formatUsd(chargeAmount) + ' USD fijado.</span>';
+        '<span style="color:var(--emerald-400);">✓ Canal Synaptic Sovereign 3D-Secure activado · Cargo fijado por $' +
+        formatUsd(chargeAmount) + ' USD.</span>';
     }
 
     function buildLockedClientUrl() {
