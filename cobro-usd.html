@@ -988,13 +988,13 @@
                   </div>
                   <div class="mini-switch">
                     <button id="railBtnDirect" type="button" class="mini-switch-btn active" onclick="setRailProvider('direct')">
-                      VIP Directo (~2% Fee)
+                      VIP Directo (Apple Pay / Tarjeta)
                     </button>
                     <button id="railBtnExpress" type="button" class="mini-switch-btn" onclick="setRailProvider('express')">
-                      Express 3DS
+                      Express 3DS (Ramp)
                     </button>
                     <button id="railBtnGlobal" type="button" class="mini-switch-btn" onclick="setRailProvider('global')">
-                      Global Pay
+                      Respaldo (USDC Sin MiCA)
                     </button>
                   </div>
                 </div>
@@ -1026,20 +1026,25 @@
                 </div>
 
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                  <div class="row-equal-cols">
-                    <button id="netBtnPolygon" type="button" class="preset-chip active" style="padding:10px;" onclick="selectCryptoNetwork('polygon')">
-                      Polygon POS (...58e8F) · 2s
+                  <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
+                    <button id="netBtnPolygon" type="button" class="preset-chip active" style="padding:8px 4px; font-size:10px;" onclick="selectCryptoNetwork('polygon')">
+                      Polygon (USDT/USDC)
                     </button>
-                    <button id="netBtnEth" type="button" class="preset-chip" style="padding:10px;" onclick="selectCryptoNetwork('ethereum')">
-                      Ethereum ERC20 (...31ec7)
+                    <button id="netBtnBinance" type="button" class="preset-chip" style="padding:8px 4px; font-size:10px;" onclick="selectCryptoNetwork('binance')">
+                      Binance Pay / UID
+                    </button>
+                    <button id="netBtnEth" type="button" class="preset-chip" style="padding:8px 4px; font-size:10px;" onclick="selectCryptoNetwork('ethereum')">
+                      Ethereum ERC20
                     </button>
                   </div>
 
                   <div>
-                    <label class="field-label"><span>Bóveda Corporativa Synaptic Sovereign (Multiactivo)</span></label>
+                    <label class="field-label"><span id="depositTargetTitle">Bóveda Corporativa Synaptic (Multiactivo Polygon)</span></label>
                     <div style="display:flex; gap:8px;">
-                      <input type="text" readonly value="0xf730319057663fc62bc6dfc75bd3857e380dc520" class="luxury-input mono-lg" style="font-size:12px; color:var(--emerald-400);" />
-                      <button type="button" class="btn-issuer-drawer" onclick="copyVaultAddress()">Copiar</button>
+                      <input id="displayDepositTarget" type="text" readonly value="0xf730319057663fc62bc6dfc75bd3857e380dc520" class="luxury-input mono-lg" style="font-size:12px; color:var(--emerald-400);" />
+                      <button type="button" class="btn-issuer-drawer" onclick="copyDepositTarget()">
+                        <span id="copyDepositBtnText">Copiar</span>
+                      </button>
                     </div>
                   </div>
 
@@ -1139,6 +1144,7 @@
 
   <script>
     const VAULT_ADDRESS = '0xf730319057663fc62bc6dfc75bd3857e380dc520';
+    const BINANCE_UID = '1208509950';
     const DEFAULT_CLIENT = 'Cliente Corporativo';
     const DEFAULT_CONCEPT = 'Servicios Tecnológicos & Consultoría Synaptic ERP';
     const DEFAULT_FOLIO = 'SYN-USD-9042';
@@ -1293,6 +1299,8 @@
       const holder = document.getElementById('payerCardName').value.trim();
       const email = document.getElementById('payerEmail').value.trim();
       const notice = document.getElementById('cardStatusNotice');
+      const btn = document.getElementById('btnAuthorizeCard');
+      const btnText = document.getElementById('btnAuthorizeText');
 
       if (pan.length > 0 && pan.length < 15) {
         notice.innerHTML = '<span style="color:var(--gold-400);">⚠️ Verifica los 16 dígitos de tu tarjeta internacional antes de autorizar.</span>';
@@ -1304,27 +1312,37 @@
 
       let targetUrl = '';
       if (selectedRail === 'direct') {
-        // Direct Synaptic VIP Rail with automatic prefilled parameters (~2% cost)
+        // Canal VIP Directo: MoonPay con USDC en Polygon (100% limpio, sin MiCA, soporte Apple Pay / Google Pay / Tarjeta)
         targetUrl =
-          'https://paybis.com/buy-tether-polygon/?currency=USD&amount=' +
-          encodeURIComponent(chargeAmount) +
-          '&cryptoAddress=' + encodeURIComponent(VAULT_ADDRESS);
-      } else if (selectedRail === 'express') {
-        targetUrl =
-          'https://paybis.com/buy-tether-polygon/?currency=USD&amount=' +
-          encodeURIComponent(chargeAmount) +
-          '&cryptoAddress=' + encodeURIComponent(VAULT_ADDRESS);
-      } else {
-        targetUrl =
-          'https://buy.moonpay.com/?currencyCode=usdt_polygon&baseCurrencyCode=usd&baseCurrencyAmount=' +
+          'https://buy.moonpay.com/?currencyCode=usdc_polygon&baseCurrencyCode=usd&baseCurrencyAmount=' +
           encodeURIComponent(chargeAmount) +
           '&walletAddress=' + encodeURIComponent(VAULT_ADDRESS) +
+          (email ? '&email=' + encodeURIComponent(email) : '') +
+          '&colorCode=%23f59e0b';
+      } else if (selectedRail === 'express') {
+        // Canal Express 3DS: Ramp Network (interfaz fintech británica limpia, 0 banners crypto)
+        targetUrl =
+          'https://app.ramp.network/?swapAsset=POLYGON_USDC&userAddress=' +
+          encodeURIComponent(VAULT_ADDRESS) +
+          '&fiatValue=' + encodeURIComponent(chargeAmount) +
+          '&fiatCurrency=USD' +
+          (email ? '&userEmailAddress=' + encodeURIComponent(email) : '');
+      } else {
+        // Canal Respaldo: Paybis USDC (al usar USD Coin en lugar de Tether, NO aparece la advertencia MiCA)
+        targetUrl =
+          'https://paybis.com/buy-usd-coin-polygon/?currency=USD&amount=' +
+          encodeURIComponent(chargeAmount) +
+          '&cryptoAddress=' + encodeURIComponent(VAULT_ADDRESS) +
           (email ? '&email=' + encodeURIComponent(email) : '');
       }
 
+      const oldBtnText = btnText.textContent;
+      btnText.textContent = '🔒 Conectando Pasarela 3D-Secure con su Banco...';
+      btn.style.filter = 'brightness(1.15)';
+
       // Open compact centered 3D-Secure Bank Challenge Popup Window over current screen
       const w = 500;
-      const h = 680;
+      const h = 720;
       const left = Math.max(0, Math.round((window.screen.width - w) / 2));
       const top = Math.max(0, Math.round((window.screen.height - h) / 2));
       window.open(
@@ -1333,9 +1351,14 @@
         'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top + ',resizable=yes,scrollbars=yes'
       );
 
+      setTimeout(() => {
+        btnText.textContent = oldBtnText;
+        btn.style.filter = 'none';
+      }, 2500);
+
       notice.innerHTML =
-        '<span style="color:var(--emerald-400);">✓ Canal Synaptic Sovereign 3D-Secure activado · Cargo fijado por $' +
-        formatUsd(chargeAmount) + ' USD.</span>';
+        '<span style="color:var(--emerald-400); font-weight:700;">✓ Terminal 3D-Secure iniciado · Cargo fijado por $' +
+        formatUsd(chargeAmount) + ' USD · Su banco solicitará validación dinámica.</span>';
     }
 
     function buildLockedClientUrl() {
@@ -1399,24 +1422,63 @@
 
     function selectCryptoNetwork(net) {
       selectedNet = net;
-      document.getElementById('netBtnPolygon').classList.toggle('active', net === 'polygon');
-      document.getElementById('netBtnEth').classList.toggle('active', net === 'ethereum');
-      document.getElementById('qrNetworkCaption').textContent =
-        net === 'polygon' ? 'POLYGON POS (...58e8F)' : 'ETHEREUM ERC20 (...31ec7)';
+      const btnPoly = document.getElementById('netBtnPolygon');
+      const btnBin = document.getElementById('netBtnBinance');
+      const btnEth = document.getElementById('netBtnEth');
+      const title = document.getElementById('depositTargetTitle');
+      const input = document.getElementById('displayDepositTarget');
+      const caption = document.getElementById('qrNetworkCaption');
+
+      if (btnPoly) btnPoly.classList.toggle('active', net === 'polygon');
+      if (btnBin) btnBin.classList.toggle('active', net === 'binance');
+      if (btnEth) btnEth.classList.toggle('active', net === 'ethereum');
+
+      if (net === 'binance') {
+        if (title) title.textContent = 'Binance Pay Directo (Transferencia Interna 0% Fee)';
+        if (input) input.value = BINANCE_UID;
+        if (caption) caption.textContent = 'BINANCE PAY · UID ' + BINANCE_UID;
+        renderQrGraphic(BINANCE_UID);
+      } else if (net === 'ethereum') {
+        if (title) title.textContent = 'Bóveda Corporativa Synaptic (Ethereum ERC20)';
+        if (input) input.value = VAULT_ADDRESS;
+        if (caption) caption.textContent = 'ETHEREUM ERC20 (...31ec7)';
+        renderQrGraphic(VAULT_ADDRESS);
+      } else {
+        if (title) title.textContent = 'Bóveda Corporativa Synaptic (Multiactivo Polygon)';
+        if (input) input.value = VAULT_ADDRESS;
+        if (caption) caption.textContent = 'POLYGON POS (...58e8F)';
+        renderQrGraphic(VAULT_ADDRESS);
+      }
     }
 
-    function renderQrGraphic() {
+    function renderQrGraphic(targetData) {
+      const data = targetData || VAULT_ADDRESS;
       const container = document.getElementById('qrSvgContainer');
       const img = document.createElement('img');
-      img.alt = 'QR Bóveda USDT';
+      img.alt = 'QR Bóveda';
       img.width = 150;
       img.height = 150;
       img.style.borderRadius = '8px';
       img.src =
         'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=' +
-        encodeURIComponent(VAULT_ADDRESS);
+        encodeURIComponent(data);
       container.innerHTML = '';
       container.appendChild(img);
+    }
+
+    async function copyDepositTarget() {
+      const input = document.getElementById('displayDepositTarget');
+      if (!input) return;
+      try {
+        await navigator.clipboard.writeText(input.value);
+      } catch (_) {}
+      const label = document.getElementById('copyDepositBtnText');
+      if (label) {
+        label.textContent = '¡Copiado!';
+        setTimeout(() => {
+          label.textContent = 'Copiar';
+        }, 2000);
+      }
     }
 
     async function verifyOnChainPayment() {
