@@ -782,17 +782,31 @@
               <p id="displayConcept" class="client-concept">Servicios Tecnológicos & Consultoría Synaptic ERP</p>
             </div>
 
-            <div class="price-monolith">
+            <div class="price-monolith" onclick="toggleIssuerDrawer(true)" style="cursor: pointer;" title="Haz clic para abrir el panel de edición o escribe directamente el monto">
               <div>
-                <div style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.12em; color:var(--gold-400);">
-                  Total Autorizado (Cupo en Dólares)
+                <div style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.12em; color:var(--gold-400); display:flex; align-items:center; gap:6px;">
+                  <span>Total Autorizado (Cupo en Dólares)</span>
+                  <span style="color:var(--emerald-400); font-size:10px;">✏️ Editable aquí</span>
                 </div>
-                <div class="price-usd-giant" style="margin-top:3px;">
-                  $<span id="displayAmountUsd">2,010.00</span><span>USD</span>
+                <div style="display:flex; align-items:baseline; gap:4px; margin-top:2px;">
+                  <span style="font-family:var(--font-mono); font-size:26px; font-weight:800; color:var(--gold-400);">$</span>
+                  <input
+                    id="inlineAmountUsd"
+                    type="number"
+                    min="10"
+                    max="100000"
+                    value="2010"
+                    style="background:transparent; border:none; border-bottom:1px dashed rgba(245,158,11,0.5); outline:none; font-family:var(--font-mono); font-size:28px; font-weight:800; color:#ffffff; width:150px; letter-spacing:-0.03em; padding:0 2px;"
+                    onclick="event.stopPropagation()"
+                    oninput="syncFromInline(this.value)"
+                  />
+                  <span style="font-size:13px; color:var(--gold-400); font-family:var(--font-mono); font-weight:700;">USD</span>
                 </div>
                 <div id="displayAmountClp" class="price-clp-sub">Equivalente Ref: $1.991.910 CLP</div>
               </div>
-              <span class="badge-gold">CUPO INTL</span>
+              <button type="button" class="badge-gold" style="cursor:pointer;" onclick="toggleIssuerDrawer(true)">
+                ⚙️ Opciones
+              </button>
             </div>
 
             <!-- Interactive 3D Black Titanium Card -->
@@ -1217,6 +1231,14 @@
       syncInvoiceState();
     }
 
+    function syncFromInline(val) {
+      const parsed = parseFloat(val);
+      if (Number.isFinite(parsed) && parsed > 0) {
+        document.getElementById('inputAmountUsd').value = String(parsed);
+      }
+      syncInvoiceState();
+    }
+
     function syncInvoiceState() {
       const baseAmount = getBaseAmount();
       const totalChargeUsd = getEffectiveChargeUsd();
@@ -1231,10 +1253,16 @@
         btn.classList.toggle('active', Math.abs(presetVal - baseAmount) < 0.01);
       });
 
+      const inlineEl = document.getElementById('inlineAmountUsd');
+      if (inlineEl && document.activeElement !== inlineEl) {
+        inlineEl.value = String(baseAmount);
+      }
+
       document.getElementById('displayInvoiceId').textContent = 'FOLIO #' + invoiceId;
       document.getElementById('displayClientName').textContent = clientName;
       document.getElementById('displayConcept').textContent = concept;
-      document.getElementById('displayAmountUsd').textContent = formatUsd(totalChargeUsd);
+      const displayEl = document.getElementById('displayAmountUsd');
+      if (displayEl) displayEl.textContent = formatUsd(totalChargeUsd);
       document.getElementById('displayAmountClp').textContent =
         'Equivalente Ref: $' + formatClp(clpTotal) + ' CLP (Tasa $' + formatClp(usdClpRate) + ' CLP/USD)';
 
